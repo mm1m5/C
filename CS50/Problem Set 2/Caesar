@@ -1,0 +1,68 @@
+#include <cs50.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+bool only_digits(string s);
+void rotate (char c, int n);
+
+int main(int argc, string argv[])
+{
+    if (argc != 2) //checks for command line arguments
+    {
+        printf("Usage: ./caesar key\n");
+        return 1;
+    }
+
+    bool is_digit = only_digits(argv[1]);
+
+    if (!is_digit)
+    {
+        printf("Usage: ./caesar key\n");
+        return 1;
+    }
+
+    int n = atoi(argv[1]); //convert argv[1] to an int for the key
+    string plaintext = get_string("plaintext: "); //get the plaintext from user
+
+    // Go through each character in the string
+    printf("ciphertext: ");
+    for (int i = 0; i < strlen(plaintext); i++)
+    {
+        rotate(plaintext[i], n); //call rotate to encrypt each character
+    }
+    printf("\n");
+}
+
+bool only_digits(string s)
+{
+    for (int i = 0; i < strlen(s); i++)
+    {
+        if (!isdigit(s[i]))//if character not a digit
+        {
+            return false; //return false
+        }
+    }
+    return true; //return true if character is a digit
+}
+
+void rotate (char c, int n)
+{
+    if (isalpha(c)) //If its a letter
+    {
+        char base = 'a'; //determine if lower case
+        if (isupper(c)) //determine if uppercase
+        {
+            base = 'A'; //set base to uppercase
+        }
+
+        c = (c - base + n) % 26 + base; //apply the Caesar cipher shift
+
+        printf("%c", c); //print the rotated character
+    }
+    else
+    {
+        printf("%c", c); //print non-alpha characters unchanged
+    }
+}
