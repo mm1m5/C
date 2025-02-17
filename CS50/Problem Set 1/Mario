@@ -1,0 +1,43 @@
+#include <cs50.h>
+#include <stdio.h>
+
+void right_aligned(int bricks, int height);
+void left_aligned(int bricks);
+
+int main(void)
+{
+    int height;
+    do
+    {
+        height = get_int("Height: "); //keep asking for height
+    }
+    while (height < 1); //if int is less than 1 or if not an int
+
+    for (int i = 0; i < height; i++) //right + left pyramid with gap
+    {
+        right_aligned(i + 1, height);
+        printf("  "); //prints gap of 2 #
+        left_aligned(i + 1);
+    }
+}
+
+void right_aligned(int bricks, int height)
+{
+    for (int i = 0; i < height - bricks; i++)
+    {
+        printf(" ");
+    }
+    for (int i = 0; i < bricks; i++)
+    {
+        printf("#");
+    }
+}
+
+void left_aligned(int bricks)
+{
+    for (int i = 0; i < bricks; i++)
+    {
+        printf("#");
+    }
+    printf("\n");
+}
