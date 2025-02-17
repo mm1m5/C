@@ -1,0 +1,52 @@
+#include <cs50.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+
+int POINTS[] = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
+
+int compute_score(string player);
+
+int main(void)
+{
+    //Prompt Player1 & 2 for input
+    string player1 = get_string("Player 1: \n");
+    string player2 = get_string("Player 2: \n");
+
+     //convert to uppercase,
+    for (int i = 0, len = strlen(player1); i < len; i++)
+    {
+        player1[i] = toupper(player1[i]); //converts each character to uppercase.
+    }
+
+    for (int i = 0, len = strlen(player2); i < len; i++)
+    {
+        player2[i] = toupper(player2[i]); //converts each character to uppercase.
+    }
+
+    int score1 = compute_score(player1);
+    int score2 = compute_score(player2);
+
+    if (strcmp(player1, player2) == 0) //comparing strings if equal its a tie
+    {
+            printf("Tie!\nPlayer 1 scored: %i\nPlayer 2 scored: %i\n", score1, score2);
+    }
+    else if(score1 > score2) //comparing score1 with 2
+    {
+        printf("Player 1 wins with a score of: %i! vs %i\n", score1, score2);
+    }
+    else // if not a tie and player1 is not the winner than player 2 has to be
+    {
+        printf("Player 2 wins with a score of: %i! vs %i\n", score2, score1);
+    }
+}
+
+int compute_score(string player) //assign points value to letters and score
+{
+    int score = 0;
+    for (int i = 0; i < strlen(player); i++)
+    {
+        score += POINTS[player[i] - 65]; //65 ASCI apart distance
+    }
+    return score;
+}
