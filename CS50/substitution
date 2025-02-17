@@ -1,0 +1,102 @@
+#include <ctype.h>
+#include <cs50.h>
+#include <stdio.h>
+#include <string.h>
+
+bool only_chars(string key); //checks for islpha
+bool duplicates(string key); //checks for dups
+
+int main(int argc, string argv[])
+{
+    if (argc != 2) //checks if 1 command-line arg is provided
+    {
+        printf("Usage: ./substitution\n"); //prints error message
+        return 1; //exit program
+    }
+
+    string key = argv[1]; //key is the first command arg
+
+    bool is_alpha = only_chars(key);
+
+    //check if alpha chars
+    if (!is_alpha)
+    {
+        printf("Key is invalid! Not a valid character\n"); //print error message
+        return 1;
+    }
+
+    //validate key consist of 26 chars
+    if (strlen(key) != 26) //if not equal to 26
+    {
+        printf("Key is invalid. Not 26 characters long\n"); //print error message
+        return 1; //exit
+    }
+
+    //check for dup
+    if (duplicates(key)) //call duplicate function, if true
+    {
+        printf("Key is invalid! Duplicate characters found.\n"); //print error message
+        return 1; //exit
+    }
+
+    string plaintext = get_string("plaintext: "); //prompt user for plaintext
+
+    char cipher_text[strlen(plaintext) + 1]; //for null terminator
+
+    //encrypt plaintext
+    for (int i = 0; i < strlen(plaintext); i++)
+    {
+        if (isupper(plaintext[i]))
+        {
+            int index = plaintext[i] - 'A'; //find index for upper
+            cipher_text[i] = toupper(key[index]); //map to corresponding letter in key, convert to upper
+        }
+        else if (islower(plaintext[i]))
+        {
+            int index = plaintext[i] - 'a';  //find index for lower
+            cipher_text[i] = tolower(key[index]);  //map to letter in key, convert to lower
+        }
+        else
+        {
+            cipher_text[i] = plaintext[i]; //copy non-alpha directly to cipher_text
+        }
+    }
+    cipher_text[strlen(plaintext)] = '\0'; //null end string
+
+    printf("ciphertext: %s\n", cipher_text); //print encryption
+}
+
+bool only_chars(string key)
+{
+    for (int i = 0; i < strlen(key);i++)
+    {
+        if (!isalpha(key[i])) //if not alpha
+        {
+            return false; //if non-alpha char found
+        }
+    }
+    return true; //if all chars are alpha
+}
+
+bool duplicates(string key) //char should be unique
+{
+    for (int i = 0; i < strlen(key); i++) //check for dup
+    {
+        for (int j = i + 1; j < strlen(key); j++)
+        {
+            if (toupper(key[i]) == toupper(key[j])) //if i == j, we have a duplicate, treat both as upper when comparing
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/*
+key
+./substitution JTREKYAVOGDXPSNCUIZLFBMWHQ
+
+plaintext: This is CS50.
+ciphertext: Lvoz oz RZ50.
+*/
